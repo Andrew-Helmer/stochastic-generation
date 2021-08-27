@@ -62,7 +62,7 @@ Only doing this on the first two dimensions was done for simplicity. But it woul
 
 By default, the shalton and sfaure sequences are generated with correlated swapping, which is described in Section 4.7 of the paper. You can instead use "uncorrelated swapping", which would generate sequences that are identical to fully Owen-scrambled sequences, using the --owen flag. For example, the command:
 
-<pre><code>./generate_samples --seq=sfaure05 --n=3125 --nd=5 > /my/samples/directory/sfaure05.txt</code></pre>
+<pre><code>./generate_samples --seq=sfaure05 --owen --n=3125 --nd=5 > /my/samples/directory/sfaure05.txt</code></pre>
 
 will generate an Owen-scrambled Faure (0,5)-sequence.
 
