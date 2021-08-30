@@ -34,7 +34,7 @@ int GetIntervalOffset(const uint32_t base_seed, const int interval,
 }
 
 template <unsigned base>
-std::vector<int> GetShuffledIndices(int length) {
+std::vector<int> GetShuffledIndices(const int length) {
   std::vector<int> randomized_indices(length);
   std::vector<int> digit_reversed_indices(length);
   RNG rng;
@@ -78,7 +78,7 @@ std::vector<int> GetShuffledIndices(int length) {
 // Declared here for a higher performance base-2 specialization in
 /// shuffling.cpp.
 template <>
-std::vector<int> GetShuffledIndices<2>(int length);
+std::vector<int> GetShuffledIndices<2>(const int length);
 
 // Implements Progressive Shuffling from the paper. It only shuffles points
 // that were generated in the same "pass" in their base.

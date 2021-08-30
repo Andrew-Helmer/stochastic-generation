@@ -15,7 +15,7 @@
 namespace sampling {
 
 template <>
-std::vector<int> GetShuffledIndices<2>(int length) {
+std::vector<int> GetShuffledIndices<2>(const int length) {
   std::vector<int> randomized_indices(length);
   std::vector<int> bit_reversed_indices(length);
   RNG rng;

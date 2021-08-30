@@ -100,12 +100,12 @@ inline void GetBestFaurePoint(const vector<int>& strata,
   }
 }
 
-/*
- * Generalized implementation of stochastically generated Faure sequences,
- * with correlated swapping.
- */
+// Generalized implementation of stochastically generated Faure sequences,
+// with correlated swapping.
 template <int b, int n_xor_vals, const uint32_t xor_vals[b][n_xor_vals]>
-void GetSFaureCSSamples(int num_samples, int nd, int n_candidates,
+void GetSFaureCSSamples(const int num_samples,
+                        const int nd,
+                        const int n_candidates,
                         double* samples) {
   ASSERT(nd <= b, "Only " << b << " dimensions allowed.");
   RNG rng;
@@ -146,10 +146,8 @@ void GetSFaureCSSamples(int num_samples, int nd, int n_candidates,
   }
 }
 
-/*
- * The Owen-scrambled version of the stochastic Faure sequence is the same
- * except that we use independently chosen strata offsets for each new sample.
- */
+// The Owen-scrambled version of the stochastic Faure sequence is the same
+// except that we use independently chosen strata offsets for each new sample.
 template <int b>
 int GetStrataOffset(const uint32_t base_seed, const int sample_interval,
                     const int pass) {

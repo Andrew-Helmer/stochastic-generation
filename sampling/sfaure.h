@@ -21,14 +21,30 @@ namespace sampling {
 // otherwise they use "un"correlated shuffling, i.e. the sequences are
 // equivalent to fully Owen-scrambled sequences. We haven't observed a
 // noticeable difference in the quality of either sequence.
-void GetStochasticFaure03Samples(int nSamples, int nd, bool shuffle,
-                                 int candidates, bool owen, double *samples);
-void GetStochasticFaure05Samples(int nSamples, int nd, bool shuffle,
-                                 int candidates, bool owen, double *samples);
-void GetStochasticFaure07Samples(int nSamples, int nd, bool shuffle,
-                                 int candidates, bool owen, double *samples);
-void GetStochasticFaure011Samples(int nSamples, int nd, bool shuffle,
-                                  int candidates, bool owen, double *samples);
+void GetStochasticFaure03Samples(const int num_samples,
+                                 const int nd,
+                                 const bool shuffle,
+                                 const int candidates,
+                                 const bool owen,
+                                 double *samples);
+void GetStochasticFaure05Samples(const int num_samples,
+                                 const int nd,
+                                 const bool shuffle,
+                                 const int candidates,
+                                 const bool owen,
+                                 double *samples);
+void GetStochasticFaure07Samples(const int num_samples,
+                                 const int nd,
+                                 const bool shuffle,
+                                 const int candidates,
+                                 const bool owen,
+                                 double *samples);
+void GetStochasticFaure011Samples(const int num_samples,
+                                  const int nd,
+                                  const bool shuffle,
+                                  const int candidates,
+                                  const bool owen,
+                                  double *samples);
 
 }  // namespace sampling
 

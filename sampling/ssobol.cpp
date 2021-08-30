@@ -31,8 +31,12 @@ inline void GetSobolPoint(const std::vector<int>& strata,
 }
 }  // namespace
 
-void GetStochasticSobolSamples(int num_samples, int nd, bool shuffle,
-                               int n_candidates, bool owen, double* samples) {
+void GetStochasticSobolSamples(const int num_samples,
+                               const int nd,
+                               const bool shuffle,
+                               const int n_candidates,
+                               const bool owen,
+                               double* samples) {
   ASSERT(nd <= MAX_SOBOL_DIM, "Stochastic Sobol' only works up to "
                                   << MAX_SOBOL_DIM << "dimensions.");
   ERRIF(owen, "--owen flag is meaningless for ssobol sequence.");
@@ -94,8 +98,12 @@ inline void GetPMJ02Point(const int x_stratum,
 }
 }  // namespace
 
-void GetPMJ02Samples(int num_samples, int nd, bool shuffle, int n_candidates,
-                     bool owen, double* samples) {
+void GetPMJ02Samples(const int num_samples,
+                     const int nd,
+                     const bool shuffle,
+                     const int n_candidates,
+                     const bool owen,
+                     double* samples) {
   ASSERT(nd == 2, "PMJ02 only works for 2 dimensions. Use ssobol instead.");
   ERRIF(owen, "--owen flag is meaningless for pmj02 sequence.");
 

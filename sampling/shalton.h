@@ -13,8 +13,12 @@ namespace sampling {
 
 // Fills the nd-dimensional sample array with a stochastically generated
 // Halton sequence.
-void GetStochasticHaltonSamples(int nSamples, int nd, bool shuffle,
-                                int candidates, bool owen, double* samples);
+void GetStochasticHaltonSamples(const int num_samples,
+                                const int nd,
+                                const bool shuffle,
+                                const int candidates,
+                                const bool owen,
+                                double *samples);
 
 }  // namespace sampling
 

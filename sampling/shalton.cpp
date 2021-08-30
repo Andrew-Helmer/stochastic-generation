@@ -115,8 +115,10 @@ inline void GetBestHaltonPoint(const vector<int>& strata,
   }
 }
 
-void GetStochasticHaltonCSSamples(int num_samples, int nd,
-                                  int n_candidates, double *samples) {
+void GetStochasticHaltonCSSamples(const int num_samples,
+                                  const int nd,
+                                  const int n_candidates,
+                                  double *samples) {
   ASSERT(nd <= MAX_HALTON_DIM,
          "Only " << MAX_HALTON_DIM << " dimensions allowed.");
   RNG rng;
@@ -163,9 +165,9 @@ void GetStochasticHaltonCSSamples(int num_samples, int nd,
 }
 
 int GetStratumOffset(const int pass,
-                    const int sample_interval,
-                    const int b,
-                    const uint32_t base_seed) {
+                     const int sample_interval,
+                     const int b,
+                     const uint32_t base_seed) {
   uint32_t seed = CombineHashes(base_seed, Hash(sample_interval));
   return GetStratumOffset(pass, b, seed);
 }
@@ -192,8 +194,10 @@ inline void GetHaltonStrataOwen(const int i,
   }
 }
 
-void GetStochasticHaltonOwenSamples(int num_samples, int nd,
-                                    int n_candidates, double *samples) {
+void GetStochasticHaltonOwenSamples(const int num_samples,
+                                    const int nd,
+                                    const int n_candidates,
+                                    double *samples) {
   ASSERT(nd <= MAX_HALTON_DIM,
          "Only " << MAX_HALTON_DIM << " dimensions allowed.");
   RNG rng;
@@ -235,8 +239,12 @@ void GetStochasticHaltonOwenSamples(int num_samples, int nd,
 }
 }  // namespace
 
-void GetStochasticHaltonSamples(int num_samples, int nd, bool shuffle,
-                                int candidates, bool owen, double *samples) {
+void GetStochasticHaltonSamples(const int num_samples,
+                                const int nd,
+                                const bool shuffle,
+                                const int candidates,
+                                const bool owen,
+                                double *samples) {
   ASSERT(nd <= MAX_HALTON_DIM,
          "Only " << MAX_HALTON_DIM << " dimensions allowed.");
   ASSERT(!shuffle, "Cannot effectively shuffle Halton sequences.");

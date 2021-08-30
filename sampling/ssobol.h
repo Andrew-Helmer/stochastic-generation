@@ -18,15 +18,23 @@ namespace sampling {
 // Sobol sequence, using the stochastic generation algorithm. Each of the nd
 // coordinates are stored for a sample are stored contiguously (i.e. in
 // "sample major" order).
-void GetStochasticSobolSamples(int nSamples, int nd, bool shuffle,
-                               int candidates, bool owen, double* samples);
+void GetStochasticSobolSamples(const int num_samples,
+                               const int nd,
+                               const bool shuffle,
+                               const int candidates,
+                               const bool owen,
+                               double* samples);
 
 // Fills the nd-dimensional sample array with a PMJ02 sequence, using the
 // stochastic generation algorithm and the xor-values derived in the
-// supplemental materials. ND must be 1 or 2, for higher dimensions use the
+// supplemental materials. ND must be 2, for higher dimensions use the
 // ssobol sequence.
-void GetPMJ02Samples(int nSamples, int nd, bool shuffle, int candidates,
-                     bool owen, double* samples);
+void GetPMJ02Samples(const int num_samples,
+                     const int nd,
+                     const bool shuffle,
+                     const int candidates,
+                     const bool owen,
+                     double* samples);
 
 // Query for an arbitrary coordinate from a scrambled Sobol (0,2)-sequence. Seed
 // can be the same across all dimensions, or it can be different for each
@@ -35,9 +43,15 @@ void GetPMJ02Samples(int nSamples, int nd, bool shuffle, int candidates,
 // nd is the number of dimensions shared by the same seed value, to get separate
 // hashed values for each sample index. If a different seed is provided for each
 // dimension, this can be used with nd=1.
-double GetSobolStateless(int idx, int dim, uint32_t seed, int nd = 2);
+double GetSobolStateless(const int idx,
+                         const int dim,
+                         const uint32_t seed,
+                         const int nd = 2);
 // Same as above but implemented iteratively.
-double GetSobolStatelessIter(int idx, int dim, uint32_t seed, int nd = 2);
+double GetSobolStatelessIter(const int idx,
+                             const int dim,
+                             const uint32_t seed,
+                             const int nd = 2);
 
 }  // namespace sampling
 
