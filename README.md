@@ -24,7 +24,9 @@ This library implements seven sample sequences (or algorithms) that can be gener
 
 The stochastic Sobol' sequence. One can generate up to 64 dimensions. The first two dimensions form a base-2 (0,2)-sequence, which means that they are stratified on all base-2 elementary intervals for a power-of-two prefix of samples. This is shown for the first 16 samples:
 
-<img align='center' src='https://github.com/Andrew-Helmer/stochastic-generation/blob/main/images/ssobol02.jpg'><br>
+<p align='center'>
+	<img src='https://github.com/Andrew-Helmer/stochastic-generation/blob/main/images/ssobol02.jpg'><br>
+</p>
 
 Actually this is true for all power-of-two "disjoint subsequences". So it's not just the first 16 samples, but the next 16, and the 16 after that, and so on.
 
@@ -36,7 +38,9 @@ We can generate the pmj02 sequence from "Progressive Multi-Jittered Sample Seque
 
 This library implements sfaure03, sfaure05, sfaure07, and sfaure011 sequences. The sfaure03 sequence is a base-3 (0,3)-sequence. This means that it's a 3-dimensional sequence where any power-of-three disjoint subsequence of samples is going to be distributed on all base-3 elementary intervals. Here's Figure 7 from the paper, showing how well stratified that is, in 3D, in all three 2D projections, and all three 1D projections:
 
-<img align='center' src='https://github.com/Andrew-Helmer/stochastic-generation/blob/main/images/sfaure03.jpg'><br>
+<p align='center'>
+	<img src='https://github.com/Andrew-Helmer/stochastic-generation/blob/main/images/sfaure03.jpg'><br>
+</p>
 
 If you wanted to estimate a 3D integral, and you can accept the limitation of only using powers of three, this will give very low error. The same is true using an sfaure05 sequence for a 5D integral, at powers of five. The code would be very easy to extend to higher prime bases (e.g. a stochastic Faure (0,13)-sequence), but they probably wouldn't be very useful in practice. 
 
@@ -56,7 +60,9 @@ Every sequence can be augmented with best-candidate sampling in the first two di
 
 Here's a simple comparison of 64 pmj02 points vs. 64 pmj02bn points. The spacing is slightly improved overall, though not dramatically.
 
-<img align='center' src='https://github.com/Andrew-Helmer/stochastic-generation/blob/main/images/pmj02bn.jpg'><br>
+<p align='center'>
+	<img src='https://github.com/Andrew-Helmer/stochastic-generation/blob/main/images/pmj02bn.jpg'><br>
+</p>
 
 This was limited to only the first two dimensions for simplicity. But it would be easy to extend the implementation to apply to other dimensions, where it would be appropriate. It could be useful for higher dimension pairs of the Faure or Halton sequences. If you wanted to do this, take a look at the function "GetBestFaurePoint" in sfaure.cpp, and "GetBestHaltonPoint" in shalton.cpp.
 
