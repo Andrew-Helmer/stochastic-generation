@@ -31,15 +31,15 @@ void SampleGrid2D::AddSample(const Point2D sample) {
   if (sample_grid_[grid_idx] != nullptr) {
     // Figure out how many times we need to subdivide the grid.
     Point2D conflicting_point = *sample_grid_[grid_idx];
-    int subdivisions = 0;
-    int temp_width = width_;
-    do {
+    int subdivisions = 1;
+    int temp_width = width_ * 2;
+    while (static_cast<int>(conflicting_point.x * temp_width)
+               == static_cast<int>(sample.x * temp_width) &&
+           static_cast<int>(conflicting_point.y * temp_width)
+               == static_cast<int>(sample.y * temp_width)) {
       subdivisions++;
       temp_width <<= 1;
-    } while (static_cast<int>(conflicting_point.x * temp_width)
-             == static_cast<int>(sample.x * temp_width) &&
-             static_cast<int>(conflicting_point.y * temp_width)
-             == static_cast<int>(sample.y * temp_width));
+    }
 
     // Subdivide the grid and recalculate the grid index for our new point.
     SubdivideGrid(subdivisions);

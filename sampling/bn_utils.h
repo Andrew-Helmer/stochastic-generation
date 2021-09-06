@@ -24,8 +24,7 @@ static constexpr int kBestCandidateSamples = 100;
  * We use this rather than a tree-structure like a kd-tree or quadtree, because
  * the sample sequences we're working on all have 2D stratification guarantees,
  * so the sample grid will never get too much bigger than the number of samples
- * (although it can be not great with a higher-base sequence,
- * like the SFaure011).
+ * (although it's not great with a higher-base sequence, like the SFaure011).
  */
 class SampleGrid2D {
  public:

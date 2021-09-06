@@ -43,12 +43,14 @@ inline void maybeGetIntArg(const char* arg_name, const char* arg, int* val) {
     *val = atoi(arg+len);
   }
 }
+
 inline void maybeGetBoolArg(const char* arg_name, const char* arg, bool* val) {
   const int len = strlen(arg_name);
   if (strncmp(arg_name, arg, len) == 0) {
     *val = true;
   }
 }
+
 }  // namespace
 
 int main(int argc, const char** argv) {
