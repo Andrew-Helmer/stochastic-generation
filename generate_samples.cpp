@@ -45,6 +45,13 @@
 using std::string;
 
 namespace {
+// Print out n-dimensional floating point arrays as tuples, one point per line.
+// For example, a sequence of N 3D points would be...
+// (x_0, y_0, z_0)
+// (x_1, y_1, z_1)
+// (x_2, y_2, z_2)
+// ...
+// (x_(n-1), y_(n-1), z_(n-1))
 void printNdPoints(int num_samples, int nd, double* samples) {
   for (int i = 0; i < num_samples; i++) {
     printf("(");
