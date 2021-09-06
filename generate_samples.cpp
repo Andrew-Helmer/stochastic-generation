@@ -63,6 +63,8 @@ void printNdPoints(int num_samples, int nd, double* samples) {
   }
 }
 
+// If the string "arg" starts with the string "arg_name", take the rest of
+// arg and put it in *val.
 inline void maybeGetStringArg(
     const char* arg_name, const char* arg, string* val) {
   const int len = strlen(arg_name);
@@ -71,6 +73,8 @@ inline void maybeGetStringArg(
   }
 }
 
+// If the string "arg" starts with the string "arg_name", take the rest of
+// arg, parse it as an integer, and put it in *val.
 inline void maybeGetIntArg(const char* arg_name, const char* arg, int* val) {
   const int len = strlen(arg_name);
   if (strncmp(arg_name, arg, len) == 0) {
@@ -78,6 +82,7 @@ inline void maybeGetIntArg(const char* arg_name, const char* arg, int* val) {
   }
 }
 
+// If the string "arg" starts with the string "arg_name", set *val to true.
 inline void maybeGetBoolArg(const char* arg_name, const char* arg, bool* val) {
   const int len = strlen(arg_name);
   if (strncmp(arg_name, arg, len) == 0) {
