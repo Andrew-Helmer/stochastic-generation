@@ -194,7 +194,7 @@ inline int GetMSB(uint32_t v) {
   v |= v >> 8;
   v |= v >> 16;
 
-  return MultiplyDeBruijnBitPosition[(uint32_t)( v * 0x07C4ACDDU ) >> 27] - 1;
+  return MultiplyDeBruijnBitPosition[(uint32_t)( v * 0x07C4ACDDU ) >> 27];
 }
 }  // namespace
 
@@ -206,12 +206,12 @@ double GetSobolStateless(int idx, int dim, uint32_t seed, int nd) {
   // Determine stratum size and place in previous strata.
   int log_n = GetMSB(idx);  // (Right-most bit is numbered zero)
   int prev_len = 1 << log_n;
-  int n_strata = prev_len * nd;
+  int n_strata = prev_len * 2;
   int i = idx - prev_len;
 
   // Recursively get stratum of previous sample.
   int prev_stratum =
-      GetSobolStateless(i ^ sobol_xors[dim][log_n], dim, seed) * n_strata;
+      GetSobolStateless(i ^ sobol_xors[dim][log_n], dim, seed, nd) * n_strata;
   // Generate new sample in adjacent stratum.
   return ((prev_stratum ^ 1) + HashToRnd(idx * nd + dim, seed)) / n_strata;
 }
@@ -238,6 +238,27 @@ double GetSobolStatelessIter(int idx, int dim, uint32_t seed, int nd) {
   }
 
   return static_cast<double>(bits) / 4298115584.0;
+}
+
+void GetStochasticSobolStatelessSamples(const int num_samples,
+                                        const int nd,
+                                        const bool shuffle,
+                                        const int n_candidates,
+                                        const bool owen,
+                                        double* samples) {
+  ERRIF(owen, "--owen flag is meaningless for stochastic Sobol sequences.");
+  ASSERT(n_candidates == 1,
+        "Best candidate sampling doesn't work for stateless Sobol "
+        "sampler.");
+  RNG rng;
+  const uint32_t seed = rng.GetUniformInt();
+  for (int i = 0; i < num_samples; i++) {
+    for (int d = 0; d < nd; d++) {
+      samples[i*nd + d] = GetSobolStateless(i, d, seed, nd);
+    }
+  }
+
+  if (shuffle) ProgressiveShuffleSamples<2>(num_samples, nd, samples);
 }
 
 }  // namespace sampling

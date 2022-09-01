@@ -53,6 +53,16 @@ double GetSobolStatelessIter(const int idx,
                              const uint32_t seed,
                              const int nd = 2);
 
+// Pretty much just for testing the stateless Sobol functions, but similar
+// to the GetStochasticSobolSamples above. Note that best candidate sampling
+// doesn't work, candidates must be equal to 1.
+void GetStochasticSobolStatelessSamples(const int num_samples,
+                                        const int nd,
+                                        const bool shuffle,
+                                        const int candidates,
+                                        const bool owen,
+                                        double* samples);
+
 }  // namespace sampling
 
 #endif  // SAMPLING_SSOBOL_H

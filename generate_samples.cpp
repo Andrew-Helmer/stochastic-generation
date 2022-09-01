@@ -8,9 +8,9 @@
  * sequences.
  *
  * The required arguments are:
- * --algorithm= or --a= i.e. which sampler to use
+ * --seq= for which sampler to use
  *    Valid algorithms are:
- *    { ssobol, pmj02, shalton, sfaure(03|05|07|011), uniform }
+ *    { ssobol, ssobol-stateless, pmj02, shalton, sfaure(03|05|07|011), uniform }
  * --n= is "number of samples"
  * --nd= is "number of dimensions"
  *
@@ -94,13 +94,14 @@ inline void maybeGetBoolArg(const char* arg_name, const char* arg, bool* val) {
 int main(int argc, const char** argv) {
   typedef void (*sample_fn)(int, int, bool, int, bool, double*);
   static const std::unordered_map<string, sample_fn> kSeqMap = {
-    {"ssobol",    &sampling::GetStochasticSobolSamples},
-    {"pmj02",       &sampling::GetPMJ02Samples},
-    {"sfaure03",  &sampling::GetStochasticFaure03Samples},
-    {"sfaure05",  &sampling::GetStochasticFaure05Samples},
-    {"sfaure07",  &sampling::GetStochasticFaure07Samples},
-    {"sfaure011", &sampling::GetStochasticFaure011Samples},
-    {"shalton",   &sampling::GetStochasticHaltonSamples},
+    {"ssobol",              &sampling::GetStochasticSobolSamples},
+    {"ssobol-stateless",    &sampling::GetStochasticSobolStatelessSamples},
+    {"pmj02",               &sampling::GetPMJ02Samples},
+    {"sfaure03",            &sampling::GetStochasticFaure03Samples},
+    {"sfaure05",            &sampling::GetStochasticFaure05Samples},
+    {"sfaure07",            &sampling::GetStochasticFaure07Samples},
+    {"sfaure011",           &sampling::GetStochasticFaure011Samples},
+    {"shalton",             &sampling::GetStochasticHaltonSamples},
   };
 
   argc--;
