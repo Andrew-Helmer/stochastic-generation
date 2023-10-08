@@ -1,6 +1,6 @@
 # Stochastic Generation of (t,s) Sample Sequences
 
-This is a C++ implementation of a large portion of the techniques and algorithms described in ["Stochastic Generation of (t,s) Sample Sequences"](https://www.seanet.com/~myandper/abstract/egsr21.htm), by Helmer (that's me!), Christensen, and Kensler (2021). 
+This is a C++ implementation of a large portion of the techniques and algorithms described in ["Stochastic Generation of (t,s) Sample Sequences"](https://graphics.pixar.com/library/SampleSequences/), by Helmer (that's me!), [Christensen](https://www.seanet.com/~myandper/per.htm), and [Kensler](http://eastfarthing.com/) (2021). 
 
 Short-version for people who aren't familiar with the paper: if you want to generate Owen-scrambled Sobol', Halton, or Faure sequences, or pmj02(bn) sequences, I don't think there are any faster or simpler open-source implementations out there.
 
