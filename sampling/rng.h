@@ -61,7 +61,7 @@ class RNG {
     return (xorshifted >> rot) | (xorshifted << ((-rot) & 31));
   }
   double GetUniformFloat() {
-    static constexpr double S = static_cast<double>(1.0/(1ul<<32));
+    static constexpr double S = static_cast<double>(1.0/(uint_fast64_t(0x100000000)));
     return GetUniformInt() * S;
   }
 
