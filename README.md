@@ -56,7 +56,7 @@ So for any subsequence (not just disjoint!) of 2<sup>a</sup> * 3<sup>b</sup> * 5
 
 Every sequence can be augmented with best-candidate sampling in the first two dimensions using the "--bn2d" flag. Rather than picking any random point in a valid strata, many possible candidates are evaluated, and the one that is furthest from all previous points (in those two dimensions) will be used. This can slightly improve point spacing on these sequences. For instance, to generate a pmj02bn sequence, the command would be:
 
-<pre><code>./generate_samples --seq=pmj02 --n=4096 --nd=2 > /my/samples/directory/pmj02bn.txt</code></pre>
+<pre><code>./generate_samples --seq=pmj02 --n=4096 --nd=2 --bn2d > /my/samples/directory/pmj02bn.txt</code></pre>
 
 Here's a simple comparison of 64 pmj02 points vs. 64 pmj02bn points. The spacing is slightly improved overall, though not dramatically.
 
