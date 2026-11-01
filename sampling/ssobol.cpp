@@ -2,8 +2,10 @@
  * Copyright (C) Andrew Helmer 2021.
  * Licensed under MIT Open-Source License: see LICENSE.
  *
- * This file implements Stochastic Sobol' and pmj02 sampling, along with
- * optional best-candidate sampling (for the first two dimensions).
+ * This file implements Stochastic Sobol', pmj02, and SZ sampling, along with
+ * optional best-candidate sampling (for the first two dimensions). All three
+ * are base-2 digital sequences, so they share a single implementation that is
+ * parameterized only by the sequence's xor-values.
  */
 #include "ssobol.h"
 
@@ -20,7 +22,9 @@
 
 namespace sampling {
 namespace {
-inline void GetSobolPoint(const std::vector<int>& strata,
+// Generates a point uniformly at random within a given 1D stratum for each of
+// the nd dimensions.
+inline void GetBase2Point(const std::vector<int>& strata,
                           const double i_strata,
                           const int nd,
                           RNG* rng,
@@ -29,18 +33,21 @@ inline void GetSobolPoint(const std::vector<int>& strata,
     sample[d] = (rng->GetUniformFloat() + strata[d]) * i_strata;
   }
 }
-}  // namespace
 
-void GetStochasticSobolSamples(const int num_samples,
+// Stochastically generates any base-2 digital sequence, defined entirely by its
+// xor-values (one row of 32 values per dimension).
+//
+// When going from prev_len to 2*prev_len samples, the number of 1D strata
+// doubles. Each new sample i is placed in the "sibling" of the stratum that is
+// occupied by an earlier sample, whose index is (i ^ xor_values[d][log_n]).
+// Sibling strata share the same parent stratum, so they differ only in the
+// lowest bit of the stratum index.
+template <int max_dims, const uint32_t xor_values[max_dims][32]>
+void GetStochasticBase2Samples(const int num_samples,
                                const int nd,
                                const bool shuffle,
                                const int n_candidates,
-                               const bool owen,
                                double* samples) {
-  ASSERT(nd <= MAX_SOBOL_DIM, "Stochastic Sobol' only works up to "
-                                  << MAX_SOBOL_DIM << "dimensions.");
-  ERRIF(owen, "--owen flag is meaningless for ssobol sequence.");
-
   RNG rng;
   // Generate first sample randomly.
   for (int d = 0; d < nd; d++) samples[d] = rng.GetUniformFloat();
@@ -58,22 +65,22 @@ void GetStochasticSobolSamples(const int num_samples,
     double i_strata = 1.0 / n_strata;
     for (int i = 0; i < prev_len && (prev_len + i) < num_samples; i++) {
       for (int d = 0; d < nd; d++) {
-        // It may be better if the sobol_xors were transposed for this, so that
+        // It may be better if the xor_values were transposed for this, so that
         // the inner loop corresponded to contiguous array values.
-        int prev_idx = i ^ sobol_xors[d][log_n];
+        int prev_idx = i ^ xor_values[d][log_n];
         int prev_stratum = samples[prev_idx * nd + d] * n_strata;
         strata[d] = prev_stratum^1;
       }
 
       double* sample = &(samples[(prev_len + i) * nd]);
-      GetSobolPoint(strata, i_strata, nd, &rng, sample);
+      GetBase2Point(strata, i_strata, nd, &rng, sample);
 
       // Do best-candidate sampling.
       if (n_candidates > 1) {
         candidates[0] = {sample[0], sample[1]};
         for (int cand_idx = 1; cand_idx < n_candidates; cand_idx++) {
           double candidate[2];
-          GetSobolPoint(strata, i_strata, 2, &rng, candidate);
+          GetBase2Point(strata, i_strata, 2, &rng, candidate);
           candidates[cand_idx] = {candidate[0], candidate[1]};
         }
         int best_candidate = sample_grid.GetBestCandidate(candidates);
@@ -86,17 +93,21 @@ void GetStochasticSobolSamples(const int num_samples,
 
   if (shuffle) ProgressiveShuffleSamples<2>(num_samples, nd, samples);
 }
-
-namespace {
-inline void GetPMJ02Point(const int x_stratum,
-                          const int y_stratum,
-                          const double i_strata,
-                          RNG* rng,
-                          double* sample) {
-  sample[0] = (rng->GetUniformFloat() + x_stratum) * i_strata;
-  sample[1] = (rng->GetUniformFloat() + y_stratum) * i_strata;
-}
 }  // namespace
+
+void GetStochasticSobolSamples(const int num_samples,
+                               const int nd,
+                               const bool shuffle,
+                               const int n_candidates,
+                               const bool owen,
+                               double* samples) {
+  ASSERT(nd <= MAX_SOBOL_DIM, "Stochastic Sobol' only works up to "
+                                  << MAX_SOBOL_DIM << "dimensions.");
+  ERRIF(owen, "--owen flag is meaningless for ssobol sequence.");
+
+  GetStochasticBase2Samples<MAX_SOBOL_DIM, sobol_xors>(
+      num_samples, nd, shuffle, n_candidates, samples);
+}
 
 void GetPMJ02Samples(const int num_samples,
                      const int nd,
@@ -107,48 +118,22 @@ void GetPMJ02Samples(const int num_samples,
   ASSERT(nd == 2, "PMJ02 only works for 2 dimensions. Use ssobol instead.");
   ERRIF(owen, "--owen flag is meaningless for pmj02 sequence.");
 
-  RNG rng;
-  // Generate first sample randomly.
-  for (int d = 0; d < 2; d++) samples[d] = rng.GetUniformFloat();
+  GetStochasticBase2Samples<2, pmj02_xors>(
+      num_samples, nd, shuffle, n_candidates, samples);
+}
 
-  SampleGrid2D sample_grid;
-  if (n_candidates > 1) sample_grid.AddSample({samples[0], samples[1]});
-  // Used to temporarily store candidate positions for each new point.
-  std::vector<SampleGrid2D::Point2D> candidates(n_candidates);
+void GetStochasticSZSamples(const int num_samples,
+                            const int nd,
+                            const bool shuffle,
+                            const int n_candidates,
+                            const bool owen,
+                            double* samples) {
+  ASSERT(nd <= MAX_SZ_DIM, "Stochastic SZ only works up to "
+                               << MAX_SZ_DIM << " dimensions.");
+  ERRIF(owen, "--owen flag is meaningless for ssz sequence.");
 
-  for (int log_n = 0; (1 << log_n) < num_samples; log_n++) {
-    int prev_len = 1 << log_n;
-    int n_strata = prev_len * 2;
-    double i_strata = 1.0 / n_strata;
-    for (int i = 0; i < prev_len && (prev_len + i) < num_samples; i++) {
-      const int prev_x_idx = i ^ pmj02_xors[0][log_n];
-      const int prev_x_stratum = samples[prev_x_idx*2] * n_strata;
-      const int x_stratum = prev_x_stratum^1;
-
-      const int prev_y_idx = i ^ pmj02_xors[1][log_n];
-      const int prev_y_stratum = samples[prev_y_idx*2 + 1] * n_strata;
-      const int y_stratum = prev_y_stratum^1;
-
-      double* sample = &(samples[(prev_len + i) * 2]);
-      GetPMJ02Point(x_stratum, y_stratum, i_strata, &rng, sample);
-
-      // Do best-candidate sampling.
-      if (n_candidates > 1) {
-        candidates[0] = {sample[0], sample[1]};
-        for (int cand_idx = 1; cand_idx < n_candidates; cand_idx++) {
-          double candidate[2];
-          GetPMJ02Point(x_stratum, y_stratum, i_strata, &rng, candidate);
-          candidates[cand_idx] = {candidate[0], candidate[1]};
-        }
-        int best_candidate = sample_grid.GetBestCandidate(candidates);
-        sample_grid.AddSample(candidates[best_candidate]);
-        sample[0] = candidates[best_candidate].x;
-        sample[1] = candidates[best_candidate].y;
-      }
-    }
-  }
-
-  if (shuffle) ProgressiveShuffleSamples<2>(num_samples, nd, samples);
+  GetStochasticBase2Samples<MAX_SZ_DIM, sz_xors>(
+      num_samples, nd, shuffle, n_candidates, samples);
 }
 
 /*

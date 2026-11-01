@@ -18,7 +18,7 @@ One can then generate different sequences by using the --seq= flag to specify wh
 
 ### Available Sample Sequences
 
-This library implements seven sample sequences (or algorithms) that can be generated:
+This library implements eight sample sequences (or algorithms) that can be generated:
 
 #### ssobol
 
@@ -33,6 +33,18 @@ Actually this is true for all power-of-two "disjoint subsequences". So it's not 
 #### pmj02
 
 We can generate the pmj02 sequence from "Progressive Multi-Jittered Sample Sequences" by Christensen, Kensler, and Kilpatrick (2018), but using the Stochastic Generation approach as described in our supplemental material. This is only a 2D sequence, so the flag --nd=2 must be set. For most intents and purposes, this will be the same as the first two dimensions of the ssobol sequence, although the points will be ordered differently within each power of two.
+
+#### ssz
+
+The stochastic SZ sequence, from ["SZ Sequences: Binary-Based (0, 2^q)-Sequences"](https://dl.acm.org/doi/10.1145/3763272) by Ahmed et al. (2025). This can be used up to 16 dimensions, although the sequence is infinitely extensible to higher dimensionality. The flags --seq=sz, --seq=ssz, and --seq=sszsequence will generate the same sequence.
+
+Every aligned pair of dimensions (0+1, 2+3, etc.) forms a base-2 (0,2)-sequence, similar to Sobol and pmj02. Additionally, every aligned group of four dimensions (0-3, 4-7, etc.) forms a base-4 (0,4)-sequence, and all 16 dimensions together form a base-16 (0,16)-sequence. So for example, any disjoint subsequence of 256 points will be stratified on every 2D grid of 16x16 strata, in any pair of dimensions, and also on the 4x4x4x4 grid in each aligned group of four dimensions.
+
+This makes the first four dimensions especially nice for rendering, where we often combine two inherently 2D sampling domains, like a 2D pixel position and a 2D lens position, or a 2D light sample and a 2D BRDF sample. Each pair gets the ideal 2D stratification, and the four dimensions together are stratified as well as possible.
+
+For example, to generate 4096 samples of a 4D shuffled SZ sequence:
+
+<pre><code>./generate_samples --seq=ssz --shuffle --n=4096 --nd=4 > /my/samples/directory/ssz.txt</code></pre>
 
 #### sfaure(03|05|07|011)
 
@@ -78,7 +90,7 @@ We haven't observed much differences between the quality of sequences generated 
 
 ### Shuffling and Decorrelation
 
-With the --shuffle flag, the ssobol and sfaure sequences will be *progressively* shuffled, which will decorrelate subsequent runs of a particular sequence. Because the shuffling is done progressively, any power-of-b prefix of the sequence will be unchanged, so best-candidate sampling will still improve distances. See Section 5.2 of the paper for more information on this.
+With the --shuffle flag, the ssobol, ssz, and sfaure sequences will be *progressively* shuffled, which will decorrelate subsequent runs of a particular sequence. Because the shuffling is done progressively, any power-of-b prefix of the sequence will be unchanged, so best-candidate sampling will still improve distances. See Section 5.2 of the paper for more information on this.
 
 ## Performance
 
@@ -110,7 +122,7 @@ might give:
 
 ## Xor-value Generation
 
-The xor_values.py file can be used to generate the xor-values for the sfaure and pmj02 sequences, straight from their mathematical definitions. The xor-values for the Sobol' sequence are based on the choice of direction numbers, which is itself a complex process, so this was omitted. But the PBRT v3 renderer has a set of generator matrices for the Sobol' sequence, which were used to obtain the xor-values in this code. You can find PBRT's generator matrices here: https://raw.githubusercontent.com/mmp/pbrt-v3/main/src/core/sobolmatrices.cpp
+The xor_values.py file can be used to generate the xor-values for the sfaure, pmj02, and ssz sequences, straight from their mathematical definitions. The xor-values for the Sobol' sequence are based on the choice of direction numbers, which is itself a complex process, so this was omitted. But the PBRT v3 renderer has a set of generator matrices for the Sobol' sequence, which were used to obtain the xor-values in this code. You can find PBRT's generator matrices here: https://raw.githubusercontent.com/mmp/pbrt-v3/main/src/core/sobolmatrices.cpp
 
 ## Licensing
 

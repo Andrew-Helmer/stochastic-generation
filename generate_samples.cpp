@@ -10,7 +10,9 @@
  * The required arguments are:
  * --seq= for which sampler to use
  *    Valid algorithms are:
- *    { ssobol, ssobol-stateless, pmj02, shalton, sfaure(03|05|07|011), uniform }
+ *    { ssobol, ssobol-stateless, pmj02, ssz, shalton, sfaure(03|05|07|011),
+ *      uniform }
+ *    (sz, szsequence, and sszsequence are aliases for ssz.)
  * --n= is "number of samples"
  * --nd= is "number of dimensions"
  *
@@ -97,6 +99,10 @@ int main(int argc, const char** argv) {
     {"ssobol",              &sampling::GetStochasticSobolSamples},
     {"ssobol-stateless",    &sampling::GetStochasticSobolStatelessSamples},
     {"pmj02",               &sampling::GetPMJ02Samples},
+    {"sz",                  &sampling::GetStochasticSZSamples},
+    {"ssz",                 &sampling::GetStochasticSZSamples},
+    {"szsequence",          &sampling::GetStochasticSZSamples},
+    {"sszsequence",         &sampling::GetStochasticSZSamples},
     {"sfaure03",            &sampling::GetStochasticFaure03Samples},
     {"sfaure05",            &sampling::GetStochasticFaure05Samples},
     {"sfaure07",            &sampling::GetStochasticFaure07Samples},

@@ -2,10 +2,11 @@
  * Copyright (C) Andrew Helmer 2021.
  * Licensed under MIT Open-Source License: see LICENSE.
  *
- * This header defines functions to stochastically generate both the
- * high-dimensional Sobol' sequence, as well as the pmj02 sequence from
+ * This header defines functions to stochastically generate the
+ * high-dimensional Sobol' sequence, the pmj02 sequence from
  * "Progressive Multi-Jittered Sample Sequences"
- * by Christensen, Kensler, and Kilpatrick (2018)
+ * by Christensen, Kensler, and Kilpatrick (2018), and the SZ sequence from
+ * "SZ Sequences: Binary-Based (0, 2^q)-Sequences" by Ahmed et al. (2025).
  */
 #ifndef SAMPLING_SSOBOL_H
 #define SAMPLING_SSOBOL_H
@@ -35,6 +36,22 @@ void GetPMJ02Samples(const int num_samples,
                      const int candidates,
                      const bool owen,
                      double* samples);
+
+// Fills the nd-dimensional sample array with an Owen-scrambled SZ sequence,
+// using the stochastic generation algorithm, with generator matrices from a
+// new direct construction (see xor_values.py). Up to 16 dimensions.
+//
+// Every aligned pair of dimensions (2k, 2k+1) is a base-2 (0,2)-sequence,
+// every aligned group of four (4k, ..., 4k+3) is a base-4 (0,4)-sequence, and
+// all 16 dimensions together are a base-16 (0,16)-sequence. For rendering, the
+// first four dimensions are an excellent choice, e.g. combining a 2D pixel
+// position and a 2D lens position.
+void GetStochasticSZSamples(const int num_samples,
+                            const int nd,
+                            const bool shuffle,
+                            const int candidates,
+                            const bool owen,
+                            double* samples);
 
 // Query for an arbitrary coordinate from a scrambled Sobol (0,2)-sequence. Seed
 // can be the same across all dimensions, or it can be different for each
