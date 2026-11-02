@@ -36,7 +36,7 @@ We can generate the pmj02 sequence from "Progressive Multi-Jittered Sample Seque
 
 #### ssz
 
-The stochastic SZ sequence, from ["SZ Sequences: Binary-Based (0, 2^q)-Sequences"](https://dl.acm.org/doi/10.1145/3763272) by Ahmed et al. (2025). This can be used up to 16 dimensions, although the sequence is infinitely extensible to higher dimensionality. The flags --seq=sz, --seq=ssz, and --seq=sszsequence will generate the same sequence.
+The stochastic SZ sequence, from ["SZ Sequences: Binary-Based (0, 2^q)-Sequences"](https://dl.acm.org/doi/10.1145/3763272) by Ahmed et al. (2025), with generator matrices constructed using a [direct construction](https://andrew-helmer.github.io/sz-matrix-construction/). This can be used up to 16 dimensions, although the sequence is infinitely extensible to higher dimensionality. The flags --seq=sz, --seq=ssz, and --seq=sszsequence will generate the same sequence.
 
 Every aligned pair of dimensions (0+1, 2+3, etc.) forms a base-2 (0,2)-sequence, similar to Sobol and pmj02. Additionally, every aligned group of four dimensions (0-3, 4-7, etc.) forms a base-4 (0,4)-sequence, and all 16 dimensions together form a base-16 (0,16)-sequence. So for example, any disjoint subsequence of 256 points will be stratified on every 2D grid of 16x16 strata, in any pair of dimensions, and also on the 4x4x4x4 grid in each aligned group of four dimensions.
 
@@ -122,7 +122,7 @@ might give:
 
 ## Xor-value Generation
 
-The xor_values.py file can be used to generate the xor-values for the sfaure, pmj02, and ssz sequences, straight from their mathematical definitions. The xor-values for the Sobol' sequence are based on the choice of direction numbers, which is itself a complex process, so this was omitted. But the PBRT v3 renderer has a set of generator matrices for the Sobol' sequence, which were used to obtain the xor-values in this code. You can find PBRT's generator matrices here: https://raw.githubusercontent.com/mmp/pbrt-v3/main/src/core/sobolmatrices.cpp
+The xor_values.py file can be used to generate the xor-values for the sfaure, pmj02, and ssz sequences, straight from their mathematical definitions (using a [direct construction](https://andrew-helmer.github.io/sz-matrix-construction/) for the SZ generator matrices). The xor-values for the Sobol' sequence are based on the choice of direction numbers, which is itself a complex process, so this was omitted. But the PBRT v3 renderer has a set of generator matrices for the Sobol' sequence, which were used to obtain the xor-values in this code. You can find PBRT's generator matrices here: https://raw.githubusercontent.com/mmp/pbrt-v3/main/src/core/sobolmatrices.cpp
 
 ## Licensing
 

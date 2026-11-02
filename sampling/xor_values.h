@@ -90,10 +90,11 @@ static constexpr uint32_t sobol_xors[MAX_SOBOL_DIM][32] = {
 
 /*
  * The SZ sequence from "SZ Sequences: Binary-Based (0, 2^q)-Sequences" by
- * Ahmed et al. (2025), with generator matrices from a new direct construction
- * (see xor_values.py). Every aligned pair of dimensions is a base-2
- * (0,2)-sequence, every aligned group of four is a base-4 (0,4)-sequence, and
- * all 16 dimensions together are a base-16 (0,16)-sequence.
+ * Ahmed et al. (2025), with generator matrices from the direct construction in
+ * https://andrew-helmer.github.io/sz-matrix-construction/ (see xor_values.py).
+ * Every aligned pair of dimensions is a base-2 (0,2)-sequence, every aligned
+ * group of four is a base-4 (0,4)-sequence, and all 16 dimensions together are
+ * a base-16 (0,16)-sequence.
  */
 static constexpr int MAX_SZ_DIM = 16;
 static constexpr uint32_t sz_xors[MAX_SZ_DIM][32] = {
